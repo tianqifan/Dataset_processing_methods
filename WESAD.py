@@ -23,7 +23,7 @@ record=['ECG','EMG','EDA','Resp']
 name=record[0]
 data_path='path for save Processed data'
 size=7000 # 700Hz*10s
-def data_pre():
+def data_pre(save path,filepath,new save path):
     # set new paths
     path=r'save path'
     print(os.path.exists(path))
@@ -121,3 +121,18 @@ def data_pre():
     print("data shape", data.shape, "label shape", label.shape)
     np.save("new save path" + name + "/data7000.npy", data)
     np.save("new save path" + name + "/label10s_3classnpy", label)
+    return data
+def down_sample(data,targrt_freq,source_freq=256):
+    data_down = []
+    num=len(data)
+    assert targrt_freq<=source_freq
+    for i in range(len(data)):
+        out,_=processing.resample_sig((data[i]),fs=source_freq,fs_target=targrt_freq)
+        #out=out.reshape(-1,1)
+        #print(out.shape)
+        data_down.append(out)
+    data_down=np.array(data_down)
+    return data_down
+if __name__=='__main__':
+    data=data_pre(save path,filepath,new save path)
+    data=dawn_sample(data,targrt_freq,source_freq=700)
